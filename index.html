@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Panel Flip</title>
+
+    <link rel="stylesheet" href="panel_flip.css">
+</head>
+<body>
+
+<button onclick="flipTo('fr')">En Français</button>
+<button onclick="flipTo('en')">In English</button>
+
+<div id="threed-container">
+
+<?php
+$count = 200;
+for ($i = 0; $i < $count; $i++) { ?>
+
+    <div style="display: inline-block; margin: 20px;">
+
+        <div class="flip-container">
+            <div class="background"></div>
+            <div class="wall-top"></div>
+            <div class="wall-bot"></div>
+            <div class="wall-left"></div>
+            <div class="wall-right"></div>
+
+            <div class="flipper">
+                <div class="front">
+                </div>
+                <div class="back">
+                </div>
+            </div>
+
+
+            <template class="content-en">
+                A text in English
+            </template>
+            <template class="content-fr">
+                Un texte en Français
+            </template>
+        </div>
+
+    </div>
+
+<?php } ?>
+
+</div>
+
+<script src="oncssanimationend.js"></script>
+
+<script>
+    function elemFlipTo (flipContainer, contentName) {
+        var flipContainerPosTop = flipContainer.getBoundingClientRect().top;
+        var flipContainerPosLeft = flipContainer.getBoundingClientRect().left;
+        setTimeout(function () {
+            var contentHTML = flipContainer.getElementsByClassName("content-" + contentName)[0].innerHTML;
+            var front = flipContainer.getElementsByClassName("front")[0];
+            var back = flipContainer.getElementsByClassName("back")[0];
+            var flipper = flipContainer.getElementsByClassName("flipper")[0];
+            back.innerHTML = contentHTML;
+            flipContainer.classList.add("flip");
+            flipper.onCSSTransitionEnd(function () {
+                front.innerHTML = contentHTML;
+                flipContainer.classList.remove("flip");
+            });
+        }, flipContainerPosTop + Math.random()*flipContainerPosLeft/5);
+    }
+
+    function flipTo(contentName) {
+        var flipContainers = document.getElementsByClassName("flip-container");
+        var i;
+        var flipContainer;
+        for (i = 0; i < flipContainers.length; i++) {
+            flipContainer = flipContainers[i];
+            elemFlipTo(flipContainer, contentName);
+        }
+    }
+
+    function handlePerspective() {
+        var oriX = window.innerWidth/2;
+        var oriY = window.innerHeight/2;
+        var threedContainer = document.getElementById("threed-container");
+        threedContainer.style.perspectiveOrigin = oriX + "px " + oriY + "px";
+        window.addEventListener("resize", function() {
+            oriX = window.innerWidth/2;
+            oriY = window.innerHeight/2;
+            threedContainer.style.perspectiveOrigin = (oriX + window.scrollX)  + "px " + (oriY + window.scrollY) + "px";
+        });
+        document.addEventListener("scroll", function() {
+            threedContainer.style.perspectiveOrigin = (oriX + window.scrollX)  + "px " + (oriY + window.scrollY) + "px";
+        });
+    }
+
+    window.onload = function () {
+        handlePerspective();
+        flipTo("en");
+    };
+
+
+</script>
+
+</body>
+</html>

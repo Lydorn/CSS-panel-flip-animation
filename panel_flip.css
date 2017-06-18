@@ -1,0 +1,101 @@
+/* entire container, keeps perspective */
+#threed-container {
+    perspective: 2000px;
+    perspective-origin: 50% 50%;
+    transform-style: preserve-3d;
+}
+
+.flip-container {
+    width: 100px;
+    height: 100px;
+}
+
+.flip-container .background,
+.flip-container .wall-top,
+.flip-container .wall-bot,
+.flip-container .wall-left,
+.flip-container .wall-right {
+    background-color: #444;
+}
+
+.flip-container .background {
+    transform: translateZ(-50px);/* half of height */
+}
+
+/* flip speed goes here */
+.flip-container .flipper {
+
+    transform-origin: 100% 50px; /* half of height */
+
+    transition: 0s;
+    transform-style: preserve-3d;
+
+    position: relative;
+}
+.flip-container.flip .flipper {
+    transition: 1s;
+}
+
+/* flip the pane when hovered */
+.flip-container.flip .flipper {
+    transform: rotateX(-180deg);
+}
+
+.flip-container .hole,
+.flip-container .background,
+.flip-container .wall-top,
+.flip-container .wall-bot,
+.flip-container .wall-left,
+.flip-container .wall-right {
+    position: absolute;
+    width: 100px;
+    height: 100px;
+}
+
+.flip-container .front,
+.flip-container .back {
+    position: absolute;
+    width: 98px;
+    height: 98px;
+}
+
+/* Walls */
+.flip-container .wall-top {
+    transform-origin: 0 0;
+    transform: rotateX(-90deg);
+}
+.flip-container .wall-bot {
+    transform-origin: 0 100%;
+    transform: rotateX(90deg);
+}
+.flip-container .wall-left {
+    transform-origin: 0 0;
+    transform: rotateY(90deg);
+}
+.flip-container .wall-right {
+    transform-origin: 100% 0;
+    transform: rotateY(-90deg);
+}
+
+/* hide back of pane during swap */
+.flip-container .front, .flip-container .back {
+    border: 1px solid #888;
+    background-color: #FFF;
+
+    backface-visibility: hidden;
+
+    top: 0;
+    left: 0;
+}
+
+/* front pane, placed above back */
+.flip-container .front {
+    z-index: 2;
+    /* for firefox 31 */
+    transform: rotateX(0deg);
+}
+
+/* back, initially hidden pane */
+.flip-container .back {
+    transform: rotateX(180deg);
+}
